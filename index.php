@@ -115,44 +115,47 @@ foreach ($tables as $table) {
 }
 
 use Object\classes\Client;
+use Object\classes\Order;
+use Object\classes\OrderProduct;
 use Object\classes\Product;
 use Object\classes\Shop;
 
 // магазины
 $shop = new Shop($pdo, 'shop', ['name', 'address']);
 
-// $insertedShop = $shop->insert(['name', 'address'], ['Подружка', 'г. Москва, Измайловский бульвар д.5']);
-// print_r($insertedShop);
-
-// $updatedShop = $shop->update(6, ['name' => 'Ювелирный', 'address' => 'г. Москва, Краснопресненская д. 3']);
-// print_r($updatedShop);
-
-// $foundShop = $shop->find(2);
-// print_r($foundShop);
-
-// $deletedShop = $shop->delete(6);
-// print_r($deletedShop);
+$shop->insert(['name', 'address'], ['Подружка', 'г. Москва, Измайловский бульвар д.5']);
+$shop->update(6, ['name' => 'Ювелирный', 'address' => 'г. Москва, Краснопресненская д. 3']);
+$shop->find(2);
+$shop->delete(5);
 
 // клиенты
 $client = new Client($pdo, 'client', ['phone', 'name']);
 
-// $insertedClient = $client->insert(['phone', 'name'], ['+79267928574', 'Афанасий Рогулькин']);
-// print_r($insertedClient);
+$client->insert(['phone', 'name'], ['+79267928574', 'Афанасий Рогулькин']);
+$client->update(2, ['phone' => '+79663512548', 'name' => 'Вячеслав Дурашкин']);
+$client->find(4);
+$client->delete(5);
 
-// $updatedClient = $client->update(2, ['phone' => '+79663512548', 'name' => 'Вячеслав Дурашкин']);
-// print_r($updatedClient);
-
-// $foundClient = $client->find(4);
-// print_r($foundClient);
-
-// $deletedClient = $client->delete(5);
-// print_r($deletedClient);
-
+// продукты
 $product = new Product($pdo, 'product', ['name', 'price', 'count', 'shop_id']);
 
-$insertedProduct = $product->insert(['name', 'price', 'count', 'shop_id'], ['Сухарики', '80.00', '12', 3]);
-$updatedProduct = $product->update(2, ['name' => 'Кефир', 'price' => '105.50', 'count' => '7', 'shop_id' => 4]);
-$foundProduct = $product->find(4);
-$deletedProduct = $product->delete(5);
+$product->insert(['name', 'price', 'count', 'shop_id'], ['Сухарики', '80.00', '12', 3]);
+$product->update(2, ['name' => 'Кефир', 'price' => '105.50', 'count' => '7', 'shop_id' => 4]);
+$product->find(4);
+$product->delete(5);
 
+// заказы
+$order = new Order($pdo, 'orders', ['created_at', 'shop_id', 'client_id']);
 
+$order->insert(['created_at', 'shop_id', 'client_id'], ['2024-01-17 10:20:00', 6, 6]);
+$order->update(2, ['created_at' => '2024-01-15 11:35:01', 'shop_id' => 1, 'client_id' => 1]);
+$order->find(3);
+$order->delete(4);
+
+// соответствие продуктов и заказов
+$orderProduct = new OrderProduct($pdo, 'order_product', ['product_id', 'order_id', 'price']);
+
+$orderProduct->insert(['product_id', 'order_id', 'price'], [6, 6, 500.00]);
+$orderProduct->update(6, ['product_id' => 6, 'order_id' => 6, 'price' => 750.50]);
+$orderProduct->find(2);
+$orderProduct->delete(6);
