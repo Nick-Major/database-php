@@ -1,5 +1,11 @@
 <?php
 
+if (!file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'autoloader.php')) {
+    die('Autoloader not found!');
+}
+
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'autoloader.php');
+
 if (file_exists('eshop.db')) {
     unlink('eshop.db');
 }
@@ -107,3 +113,46 @@ foreach ($tables as $table) {
     $count = $pdo->query("SELECT COUNT(*) FROM $table")->fetchColumn();
     echo "Таблица $table: $count записей\n";
 }
+
+use Object\classes\Client;
+use Object\classes\Product;
+use Object\classes\Shop;
+
+// магазины
+$shop = new Shop($pdo, 'shop', ['name', 'address']);
+
+// $insertedShop = $shop->insert(['name', 'address'], ['Подружка', 'г. Москва, Измайловский бульвар д.5']);
+// print_r($insertedShop);
+
+// $updatedShop = $shop->update(6, ['name' => 'Ювелирный', 'address' => 'г. Москва, Краснопресненская д. 3']);
+// print_r($updatedShop);
+
+// $foundShop = $shop->find(2);
+// print_r($foundShop);
+
+// $deletedShop = $shop->delete(6);
+// print_r($deletedShop);
+
+// клиенты
+$client = new Client($pdo, 'client', ['phone', 'name']);
+
+// $insertedClient = $client->insert(['phone', 'name'], ['+79267928574', 'Афанасий Рогулькин']);
+// print_r($insertedClient);
+
+// $updatedClient = $client->update(2, ['phone' => '+79663512548', 'name' => 'Вячеслав Дурашкин']);
+// print_r($updatedClient);
+
+// $foundClient = $client->find(4);
+// print_r($foundClient);
+
+// $deletedClient = $client->delete(5);
+// print_r($deletedClient);
+
+$product = new Product($pdo, 'product', ['name', 'price', 'count', 'shop_id']);
+
+$insertedProduct = $product->insert(['name', 'price', 'count', 'shop_id'], ['Сухарики', '80.00', '12', 3]);
+$updatedProduct = $product->update(2, ['name' => 'Кефир', 'price' => '105.50', 'count' => '7', 'shop_id' => 4]);
+$foundProduct = $product->find(4);
+$deletedProduct = $product->delete(5);
+
+
